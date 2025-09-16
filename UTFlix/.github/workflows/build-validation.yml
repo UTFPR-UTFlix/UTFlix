@@ -9,9 +9,7 @@ on:
     branches: [ main ]
 
 jobs:
-  # O nome do job deve ser EXATAMENTE IGUAL ao que você configurou
-  # nas regras de proteção da branch.
-  "Esta compilando":
+  "Compilando":
     # O workflow rodará em uma máquina virtual Linux (Ubuntu)
     runs-on: ubuntu-latest
 
