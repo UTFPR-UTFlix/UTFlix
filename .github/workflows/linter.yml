@@ -1,0 +1,40 @@
+# .github/workflows/linter.yml
+
+name: JavaScript Linter (ESLint)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # O nome do job agora é 'lint-backend'
+  lint-backend:
+    name: Lintando o Backend
+    runs-on: ubuntu-latest
+
+    # Define o diretório de trabalho padrão para todos os passos 'run' deste job
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        # O caminho do cache agora aponta para dentro da pasta backend
+        cache-dependency-path: 'backend/package-lock.json'
+
+    - name: Install dependencies
+      # Este comando rodará dentro da pasta ./backend por causa do 'defaults' acima
+      run: npm ci
+
+    - name: Run ESLint
+      # Este comando também rodará dentro da pasta ./backend
+      run: npm run lint
