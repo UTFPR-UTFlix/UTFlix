@@ -17,36 +17,30 @@ jobs:
     # O workflow rodará em uma máquina virtual Linux (Ubuntu)
     runs-on: ubuntu-latest
 
-    # Define o diretório de trabalho padrão para os comandos 'run'
-    # Baseado no erro, este é o caminho mais provável para sua pasta backend.
+    # Define o diretório de trabalho padrão para todos os comandos 'run'
     defaults:
       run:
-        working-directory: ./UTFlix/backend
+        # CORREÇÃO APLICADA: O nome da pasta agora está correto
+        working-directory: ./BackEnd
 
     steps:
     # 1. Clona o seu repositório para dentro da máquina virtual
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 2. PASSO DE DEBUG: Lista todos os arquivos e pastas recursivamente
-    #    Isso vai nos mostrar a estrutura exata do seu projeto.
-    - name: Debug - List all files recursively
-      run: ls -R
-      # A linha abaixo força este comando a rodar na raiz do projeto, ignorando o 'defaults'
-      working-directory: .
-
-    # 3. Configura a versão do Node.js (sem cache)
+    # 2. Configura a versão do Node.js e o cache de dependências
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
+        cache: 'npm'
+        # CORREÇÃO APLICADA: O caminho para o cache também foi corrigido
+        cache-dependency-path: 'BackEnd/package-lock.json'
 
-    # 4. Instala as dependências a partir do lockfile
-    #    (Será executado dentro de ./UTFlix/backend por causa do 'defaults')
+    # 3. Instala as dependências a partir do lockfile
     - name: Install dependencies
       run: npm ci
 
-    # 5. Roda o ESLint para validar o código
-    #    (Também será executado dentro de ./UTFlix/backend)
+    # 4. Roda o ESLint para validar o código
     - name: Run ESLint
       run: npm run lint
