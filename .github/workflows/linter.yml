@@ -11,7 +11,7 @@ on:
 jobs:
   # O nome do job agora é 'lint-backend'
   lint-backend:
-    name: Lintando o Backend
+    name: lint-backend
     runs-on: ubuntu-latest
 
     # Define o diretório de trabalho padrão para todos os passos 'run' deste job
