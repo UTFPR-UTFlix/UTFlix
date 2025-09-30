@@ -1,7 +1,7 @@
-# .github/workflows/linter.yml
-
+# Nome do workflow que aparecerá na aba "Actions" do GitHub
 name: JavaScript Linter (ESLint)
 
+# Gatilhos: quando este workflow deve rodar
 on:
   push:
     branches: [ main ]
@@ -9,32 +9,39 @@ on:
     branches: [ main ]
 
 jobs:
-  # O nome do job agora é 'lint-backend'
+  # ID do job, usado na regra de proteção de branch
   lint-backend:
+    # Nome de exibição do job, igual ao ID para evitar confusão
     name: lint-backend
+    
+    # O workflow rodará em uma máquina virtual Linux (Ubuntu)
     runs-on: ubuntu-latest
 
-    # Define o diretório de trabalho padrão para todos os passos 'run' deste job
+    # Define o diretório de trabalho padrão para todos os comandos 'run'
     defaults:
       run:
         working-directory: ./backend
 
     steps:
+    # 1. Clona o seu repositório para dentro da máquina virtual
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # 2. Configura a versão do Node.js e o cache de dependências
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
         cache: 'npm'
-        # O caminho do cache agora aponta para dentro da pasta backend
+        # Caminho para o arquivo que define a chave do cache
         cache-dependency-path: 'backend/package-lock.json'
 
+    # 3. Instala as dependências a partir do lockfile
+    #    (Este comando será executado dentro de ./backend por causa do 'defaults')
     - name: Install dependencies
-      # Este comando rodará dentro da pasta ./backend por causa do 'defaults' acima
       run: npm ci
 
+    # 4. Roda o ESLint para validar o código
+    #    (Este comando também será executado dentro de ./backend)
     - name: Run ESLint
-      # Este comando também rodará dentro da pasta ./backend
       run: npm run lint
