@@ -1,0 +1,22 @@
+// Arquivo: /prisma/schema.prisma
+
+// 1. Configura o gerador do Prisma Client
+generator client {
+  provider      = "prisma-client-js"
+  // Prepara o Prisma para rodar no seu PC (native) e no contêiner Docker (linux-musl)
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+// 2. Define a fonte de dados (seu banco de dados)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Lê a URL de conexão do arquivo .env
+}
+
+// 3. Define o modelo de dados da sua aplicação
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
