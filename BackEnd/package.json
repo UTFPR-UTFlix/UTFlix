@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "start": "node src/index.js",
-  "dev": "nodemon src/index.js",
-  "lint": "npx eslint .",
-  "lint:fix": "npx eslint . --fix"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +16,9 @@
     "@prisma/client": "^6.16.3",
     "express": "^5.1.0",
     "pg": "^8.16.3",
-    "prisma": "^6.16.3"
+    "prisma": "^6.16.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
