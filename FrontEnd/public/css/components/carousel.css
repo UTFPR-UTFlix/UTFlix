@@ -1,0 +1,6 @@
+/* BEM: carousel */
+.carousel {}
+.carousel__track { scroll-snap-type: x mandatory; }
+.carousel__btn {}
+.carousel__btn--prev {}
+.carousel__btn--next {}
