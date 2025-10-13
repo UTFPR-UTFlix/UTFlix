@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UTFlix — Home</title>
+  <link rel="stylesheet" href="./css/reset.css" />
+  <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="preload" href="./assets/icons/search.svg" as="image">
+</head>
+<body>
+  <header class="header" role="banner"></header>
+
+  <main id="content" class="container" tabindex="-1">
+    <section class="hero" id="hero" aria-label="Destaque"></section>
+
+    <section class="section" aria-labelledby="searchTitle">
+      <h2 id="searchTitle" class="section__title">Resultados</h2>
+      <div id="searchResults" aria-live="polite"></div>
+    </section>
+
+    <div id="row1"></div>
+    <div id="row2"></div>
+    <div id="row3"></div>
+    <div id="row4"></div>
+    <div id="row5"></div>
+  </main>
+
+  <footer class="footer">
+    <p>© UTFlix — Projeto demo estático. Cores escuras e acessibilidade com foco visível.</p>
+  </footer>
+
+  <script type="module" src="./index.js"></script>
+</body>
+</html>

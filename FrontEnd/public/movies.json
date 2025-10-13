@@ -1,0 +1,593 @@
+[
+  {
+    "id": 1,
+    "title": "Filme 01",
+    "year": 2000,
+    "rating": 8.3,
+    "duration": "147 min",
+    "genres": [
+      "Comédia"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 01.",
+    "poster": "./assets/img/poster-01.svg",
+    "banner": "./assets/img/banner-01.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "new"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 2,
+    "title": "Filme 02",
+    "year": 2006,
+    "rating": 7.8,
+    "duration": "119 min",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 02.",
+    "poster": "./assets/img/poster-02.svg",
+    "banner": "./assets/img/banner-02.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "popular",
+      "trending",
+      "classic"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 3,
+    "title": "Filme 03",
+    "year": 2010,
+    "rating": 7.6,
+    "duration": "108 min",
+    "genres": [
+      "Romance",
+      "Ação"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 03.",
+    "poster": "./assets/img/poster-03.svg",
+    "banner": "./assets/img/banner-03.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "trending"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 4,
+    "title": "Filme 04",
+    "year": 2001,
+    "rating": 8.0,
+    "duration": "117 min",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 04.",
+    "poster": "./assets/img/poster-04.svg",
+    "banner": "./assets/img/banner-04.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic",
+      "trending",
+      "new"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 5,
+    "title": "Filme 05",
+    "year": 2007,
+    "rating": 9.6,
+    "duration": "149 min",
+    "genres": [
+      "Comédia",
+      "Terror"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 05.",
+    "poster": "./assets/img/poster-05.svg",
+    "banner": "./assets/img/banner-05.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 6,
+    "title": "Filme 06",
+    "year": 1998,
+    "rating": 8.9,
+    "duration": "146 min",
+    "genres": [
+      "Sci-Fi",
+      "Romance"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 06.",
+    "poster": "./assets/img/poster-06.svg",
+    "banner": "./assets/img/banner-06.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "trending"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 7,
+    "title": "Filme 07",
+    "year": 2012,
+    "rating": 5.2,
+    "duration": "147 min",
+    "genres": [
+      "Romance",
+      "Terror"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 07.",
+    "poster": "./assets/img/poster-07.svg",
+    "banner": "./assets/img/banner-07.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic",
+      "new"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 8,
+    "title": "Filme 08",
+    "year": 2018,
+    "rating": 5.7,
+    "duration": "107 min",
+    "genres": [
+      "Ação",
+      "Terror"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 08.",
+    "poster": "./assets/img/poster-08.svg",
+    "banner": "./assets/img/banner-08.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 9,
+    "title": "Filme 09",
+    "year": 2014,
+    "rating": 8.2,
+    "duration": "114 min",
+    "genres": [
+      "Drama",
+      "Comédia"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 09.",
+    "poster": "./assets/img/poster-09.svg",
+    "banner": "./assets/img/banner-09.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "new",
+      "trending"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 10,
+    "title": "Filme 10",
+    "year": 1996,
+    "rating": 8.0,
+    "duration": "98 min",
+    "genres": [
+      "Drama",
+      "Ação"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 10.",
+    "poster": "./assets/img/poster-10.svg",
+    "banner": "./assets/img/banner-10.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic",
+      "popular",
+      "new"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 11,
+    "title": "Filme 11",
+    "year": 2023,
+    "rating": 5.2,
+    "duration": "112 min",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 11.",
+    "poster": "./assets/img/poster-11.svg",
+    "banner": "./assets/img/banner-11.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "popular",
+      "trending"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 12,
+    "title": "Filme 12",
+    "year": 2004,
+    "rating": 5.9,
+    "duration": "139 min",
+    "genres": [
+      "Ação"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 12.",
+    "poster": "./assets/img/poster-12.svg",
+    "banner": "./assets/img/banner-12.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic",
+      "popular",
+      "new"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 13,
+    "title": "Filme 13",
+    "year": 2004,
+    "rating": 6.9,
+    "duration": "110 min",
+    "genres": [
+      "Comédia"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 13.",
+    "poster": "./assets/img/poster-13.svg",
+    "banner": "./assets/img/banner-13.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "popular",
+      "trending"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 14,
+    "title": "Filme 14",
+    "year": 2010,
+    "rating": 9.4,
+    "duration": "92 min",
+    "genres": [
+      "Drama",
+      "Terror"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 14.",
+    "poster": "./assets/img/poster-14.svg",
+    "banner": "./assets/img/banner-14.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "new",
+      "trending",
+      "popular"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 15,
+    "title": "Filme 15",
+    "year": 1998,
+    "rating": 9.1,
+    "duration": "137 min",
+    "genres": [
+      "Drama",
+      "Sci-Fi"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 15.",
+    "poster": "./assets/img/poster-15.svg",
+    "banner": "./assets/img/banner-15.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic",
+      "trending",
+      "popular"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 16,
+    "title": "Filme 16",
+    "year": 2000,
+    "rating": 5.2,
+    "duration": "96 min",
+    "genres": [
+      "Romance",
+      "Terror"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 16.",
+    "poster": "./assets/img/poster-16.svg",
+    "banner": "./assets/img/banner-16.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "new"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 17,
+    "title": "Filme 17",
+    "year": 2003,
+    "rating": 6.1,
+    "duration": "129 min",
+    "genres": [
+      "Drama",
+      "Comédia"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 17.",
+    "poster": "./assets/img/poster-17.svg",
+    "banner": "./assets/img/banner-17.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 18,
+    "title": "Filme 18",
+    "year": 2020,
+    "rating": 6.5,
+    "duration": "147 min",
+    "genres": [
+      "Sci-Fi"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 18.",
+    "poster": "./assets/img/poster-18.svg",
+    "banner": "./assets/img/banner-18.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "new",
+      "classic",
+      "trending"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 19,
+    "title": "Filme 19",
+    "year": 2023,
+    "rating": 9.4,
+    "duration": "149 min",
+    "genres": [
+      "Romance",
+      "Comédia"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 19.",
+    "poster": "./assets/img/poster-19.svg",
+    "banner": "./assets/img/banner-19.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "popular",
+      "new"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 20,
+    "title": "Filme 20",
+    "year": 2008,
+    "rating": 8.5,
+    "duration": "110 min",
+    "genres": [
+      "Sci-Fi",
+      "Ação"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 20.",
+    "poster": "./assets/img/poster-20.svg",
+    "banner": "./assets/img/banner-20.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "trending",
+      "new",
+      "classic"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 21,
+    "title": "Filme 21",
+    "year": 2002,
+    "rating": 5.8,
+    "duration": "131 min",
+    "genres": [
+      "Comédia"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 21.",
+    "poster": "./assets/img/poster-21.svg",
+    "banner": "./assets/img/banner-21.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic",
+      "new"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 22,
+    "title": "Filme 22",
+    "year": 2009,
+    "rating": 9.3,
+    "duration": "129 min",
+    "genres": [
+      "Comédia",
+      "Ação"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 22.",
+    "poster": "./assets/img/poster-22.svg",
+    "banner": "./assets/img/banner-22.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 23,
+    "title": "Filme 23",
+    "year": 2004,
+    "rating": 7.7,
+    "duration": "89 min",
+    "genres": [
+      "Romance",
+      "Terror"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 23.",
+    "poster": "./assets/img/poster-23.svg",
+    "banner": "./assets/img/banner-23.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "popular",
+      "classic"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 24,
+    "title": "Filme 24",
+    "year": 2020,
+    "rating": 9.3,
+    "duration": "135 min",
+    "genres": [
+      "Drama",
+      "Terror"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 24.",
+    "poster": "./assets/img/poster-24.svg",
+    "banner": "./assets/img/banner-24.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic",
+      "trending",
+      "popular"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 25,
+    "title": "Filme 25",
+    "year": 2017,
+    "rating": 9.2,
+    "duration": "105 min",
+    "genres": [
+      "Sci-Fi",
+      "Romance"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 25.",
+    "poster": "./assets/img/poster-25.svg",
+    "banner": "./assets/img/banner-25.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "trending"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 26,
+    "title": "Filme 26",
+    "year": 2020,
+    "rating": 8.0,
+    "duration": "108 min",
+    "genres": [
+      "Sci-Fi",
+      "Terror"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 26.",
+    "poster": "./assets/img/poster-26.svg",
+    "banner": "./assets/img/banner-26.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 27,
+    "title": "Filme 27",
+    "year": 2019,
+    "rating": 6.2,
+    "duration": "108 min",
+    "genres": [
+      "Drama",
+      "Ação"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 27.",
+    "poster": "./assets/img/poster-27.svg",
+    "banner": "./assets/img/banner-27.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "trending",
+      "classic"
+    ],
+    "type": "movie"
+  },
+  {
+    "id": 28,
+    "title": "Filme 28",
+    "year": 2021,
+    "rating": 6.5,
+    "duration": "128 min",
+    "genres": [
+      "Ação"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 28.",
+    "poster": "./assets/img/poster-28.svg",
+    "banner": "./assets/img/banner-28.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "new"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 29,
+    "title": "Filme 29",
+    "year": 2015,
+    "rating": 9.6,
+    "duration": "134 min",
+    "genres": [
+      "Sci-Fi",
+      "Comédia"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 29.",
+    "poster": "./assets/img/poster-29.svg",
+    "banner": "./assets/img/banner-29.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "classic"
+    ],
+    "type": "series"
+  },
+  {
+    "id": 30,
+    "title": "Filme 30",
+    "year": 2016,
+    "rating": 5.6,
+    "duration": "97 min",
+    "genres": [
+      "Comédia",
+      "Ação"
+    ],
+    "synopsis": "Uma sinopse curta e misteriosa sobre Filme 30.",
+    "poster": "./assets/img/poster-30.svg",
+    "banner": "./assets/img/banner-30.svg",
+    "trailer": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "tags": [
+      "trending",
+      "new"
+    ],
+    "type": "movie"
+  }
+]
