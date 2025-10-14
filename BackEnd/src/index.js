@@ -1,10 +1,10 @@
-const express = require('express');
-const { PrismaClient } = require('@prisma/client');
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsDoc = require('swagger-jsdoc');
+const express = require('express')
+const { PrismaClient } = require('@prisma/client')
+const swaggerUi = require('swagger-ui-express')
+const swaggerJsDoc = require('swagger-jsdoc')
 
-const app = express();
-const prisma = new PrismaClient();
+const app = express()
+const prisma = new PrismaClient()
 
 // Configuração do Swagger
 const swaggerSpec = swaggerJsDoc({
@@ -13,14 +13,14 @@ const swaggerSpec = swaggerJsDoc({
     info: {
       title: 'UTFlix API',
       version: '1.0.0',
-      description: 'Documentação da API do projeto UTFlix',
-    },
+      description: 'Documentação da API do projeto UTFlix'
+    }
   },
-  apis: ['./src/index.js'],
-});
+  apis: ['./src/index.js']
+})
 
-app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use(express.json());
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+app.use(express.json())
 
 // ===== ROTAS =====
 
@@ -46,8 +46,8 @@ app.use(express.json());
  *                     type: string
  */
 app.get('/filmes', (req, res) => {
-  res.json([{ id: 1, nome: 'Matrix' }]);
-});
+  res.json([{ id: 1, nome: 'Matrix' }])
+})
 
 /**
  * @swagger
@@ -74,13 +74,13 @@ app.get('/filmes', (req, res) => {
  */
 app.get('/clientes', async (req, res) => {
   try {
-    const clientes = await prisma.cliente.findMany();
-    res.json(clientes);
+    const clientes = await prisma.cliente.findMany()
+    res.json(clientes)
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Não foi possível listar os clientes.' });
+    console.error(error)
+    res.status(500).json({ error: 'Não foi possível listar os clientes.' })
   }
-});
+})
 
 /**
  * @swagger
@@ -121,23 +121,23 @@ app.get('/clientes', async (req, res) => {
  */
 app.post('/clientes', async (req, res) => {
   try {
-    const { nome, email } = req.body;
+    const { nome, email } = req.body
     const novoCliente = await prisma.cliente.create({
-      data: { nome, email },
-    });
-    res.status(201).json(novoCliente);
+      data: { nome, email }
+    })
+    res.status(201).json(novoCliente)
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Não foi possível criar o cliente.' });
+    console.error(error)
+    res.status(500).json({ error: 'Não foi possível criar o cliente.' })
   }
-});
+})
 
-const PORT = 3000;
+const PORT = 3000
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+  console.log(`Servidor rodando na porta ${PORT}`)
+})
 
 process.on('SIGINT', async () => {
-  await prisma.$disconnect();
-  process.exit(0);
-});
+  await prisma.$disconnect()
+  process.exit(0)
+})
