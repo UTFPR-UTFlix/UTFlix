@@ -1,5 +1,4 @@
-version: '3.8'
-
+# A propriedade 'version' foi removida por ser obsoleta
 services:
   # Serviço do Banco de Dados PostgreSQL
   db:
@@ -7,23 +6,26 @@ services:
     container_name: UTFlix-postgres
     restart: always
     ports:
-      - "5432:5432" # Expõe a porta do Postgres para o seu computador
+      - "5432:5432"
+  
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: minhaapi
     volumes:
-      - ./pgdata:/var/lib/postgresql/data # Garante que os dados do banco não se percam
+      - ./pgdata:/var/lib/postgresql/data
 
   # Serviço da Aplicação Node.js
   app:
-    build: . # Constrói a imagem a partir do Dockerfile na pasta atual
+    build: .
     container_name: UTFlix-app
+    restart: always # <--- CORREÇÃO APLICADA AQUI
     ports:
-      - "3000:3000" # Expõe a porta da API
+      - "3000:3000"
     volumes:
-      - ./src:/usr/app/src # Mapeia seu código local para dentro do contêiner
+      - .:/usr/app
+      - /usr/app/node_modules
     depends_on:
-      - db # Garante que o banco de dados inicie antes da aplicação
+      - db
     environment:
-      DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=public" 
+      DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=public"
