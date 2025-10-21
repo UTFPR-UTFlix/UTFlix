@@ -1,27 +1,26 @@
 # Imagem base do Node.js
 FROM node:18-alpine
 
-# Define o diretório de trabalho dentro do contêiner
+# Define o diretório de trabalho
 WORKDIR /usr/app
 
-# Copia o package.json e package-lock.json para o contêiner
+# Copia apenas os arquivos de dependência
 COPY package*.json ./
 
-# Instala as dependências da aplicação
-# Isso fica em um passo separado para aproveitar o cache do Docker
+# Instala dependências
 RUN npm install
 
-# Copia o schema do Prisma primeiro para otimizar o cache
+# Copia o schema do Prisma antes (para cache inteligente)
 COPY prisma ./prisma/
 
-# Gera o cliente Prisma - ESTA É A CORREÇÃO PRINCIPAL
-RUN npx prisma generate # <--- ADICIONADO
+# Gera o cliente Prisma
+RUN npx prisma generate
 
-# Copia o restante do código da aplicação
+# Copia o restante do código
 COPY . .
 
-# Expõe a porta que a aplicação vai rodar
+# Expõe a porta da aplicação
 EXPOSE 3000
 
-# Comando para iniciar a aplicação em modo de desenvolvimento
+# Comando de inicialização (melhor usar "start" em produção)
 CMD ["npm", "run", "dev"]

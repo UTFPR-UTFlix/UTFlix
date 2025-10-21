@@ -1,25 +1,21 @@
-# A propriedade 'version' foi removida por ser obsoleta
 services:
-  # Serviço do Banco de Dados PostgreSQL
   db:
     image: postgres:14-alpine
     container_name: UTFlix-postgres
     restart: always
-    ports:
-      - "5432:5432"
-  
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: minhaapi
+    ports:
+      - "5432:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
 
-  # Serviço da Aplicação Node.js
   app:
     build: .
     container_name: UTFlix-app
-    restart: always # <--- CORREÇÃO APLICADA AQUI
+    restart: always
     ports:
       - "3000:3000"
     volumes:
@@ -29,3 +25,5 @@ services:
       - db
     environment:
       DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=public"
+    command: >
+      sh -c "npx prisma migrate deploy && npm run dev"
