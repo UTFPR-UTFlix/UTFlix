@@ -11,19 +11,34 @@ services:
       - "5432:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d minhaapi -h localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  app:
-    build: .
-    container_name: UTFlix-app
-    restart: always
+  cliente-service:
+    build: ./cliente-service
     ports:
       - "3000:3000"
-    volumes:
-      - .:/usr/app
-      - /usr/app/node_modules
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=public"
-    command: >
-      sh -c "npx prisma migrate deploy && npm run dev"
+      # Schema 'cliente'
+      DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=cliente"
+    # Este comando está correto
+    command: sh -c "npx prisma migrate dev && npm run dev"
+
+  filmes-service:
+    build: ./filmes-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Schema 'filmes'
+      DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=filmes"
+    # Este comando agora vai funcionar
+    command: sh -c "npx prisma migrate dev && npm run dev"
