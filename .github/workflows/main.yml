@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./BackEnd
+        working-directory: ./BackEnd # Isto está correto, é a raiz do seu workspace
 
     steps:
     - name: Checkout repository
@@ -23,11 +23,15 @@ jobs:
       with:
         node-version: '20.x'
         cache: 'npm'
-        # ESTA LINHA ABAIXO RESOLVE O ERRO:
+        # Esta linha está correta, aponta para o package-lock do workspace
         cache-dependency-path: BackEnd/package-lock.json
 
     - name: Install dependencies
+      # 'npm install' na raiz do workspace instala tudo (correto)
       run: npm install
 
     - name: Run ESLint
-      run: npx eslint .
+      # --- ESTA É A MUDANÇA ---
+      # Trocamos 'npx eslint .' pelo script 'npm run lint'
+      # que roda o lint em todos os sub-projetos (--workspaces)
+      run: npm run lint
