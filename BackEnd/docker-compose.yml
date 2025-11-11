@@ -41,4 +41,4 @@ services:
       # Schema 'filmes'
       DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=filmes"
     # Este comando agora vai funcionar
-    command: sh -c "npx prisma migrate dev && npm run dev"
+    command: sh -c "sleep 10 && npx prisma migrate dev && npm run dev"
