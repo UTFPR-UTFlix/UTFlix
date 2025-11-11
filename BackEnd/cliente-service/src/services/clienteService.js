@@ -112,7 +112,8 @@ async function updateCliente(id, data) {
 
   // Remove a senha do objeto de dados, se ela foi enviada
   // (A senha deve ser trocada em uma rota específica, não em um update comum)
-  const { senha, ...dadosParaAtualizar } = data;
+  // eslint-disable-next-line no-unused-vars
+  const { senha: _senha, ...dadosParaAtualizar } = data;
 
   return prisma.cliente.update({
     where: { id: clienteId },
