@@ -1,7 +1,219 @@
-/* BEM: header */
-.header {}
-.header__inner {}
-.header__search {}
-.header__actions {}
-.profile-menu {}
-.profile-menu__btn {}
+/* ============================
+   LOGO
+============================ */
+.logo {
+  font-weight: 900;
+  font-size: 2rem;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  display: inline-block;
+  text-transform: uppercase;
+  position: relative;
+  transition: transform 0.2s ease, text-shadow 0.3s ease;
+}
+
+.logo__mark {
+  color: var(--primary);
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.7), 0 0 20px rgba(229, 9, 20, 0.3);
+}
+
+.logo::before {
+  content: "";
+  position: absolute;
+  inset: -8px -16px;
+  background: radial-gradient(circle at center, rgba(229, 9, 20, 0.15), transparent 70%);
+  border-radius: 12px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover::before {
+  opacity: 1;
+}
+
+/* ============================
+   BOTÃO DE LOGOUT
+============================ */
+.profile-menu__item#logoutBtn {
+  background: var(--primary);
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: block;
+  margin: 0.5rem auto;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.profile-menu__item#logoutBtn:hover {
+  background: #f6121d;
+  transform: translateY(-1px);
+}
+
+/* ============================
+   BARRA DE PESQUISA
+============================ */
+.header__search {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #1a1a25;
+  border-radius: 999px; /* mais arredondado */
+  padding: 0.6rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s ease;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.header__search:hover {
+  background: #202030;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.header__search:focus-within {
+  background: #232336;
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(122, 162, 255, 0.3);
+}
+
+.header__search .icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.header__search:focus-within .icon {
+  opacity: 1;
+  filter: drop-shadow(0 0 4px var(--accent));
+}
+
+.header__search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 1rem;
+  flex: 1;
+}
+
+.header__search input::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.header__search input:focus::placeholder {
+  opacity: 0.5;
+}
+
+/* ============================
+   HEADER LAYOUT
+============================ */
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* ============================
+   BOTÕES DE CATEGORIAS
+============================ */
+.header__actions nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.badge {
+  background: #1a1a25; /* cor base escura */
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px; /* altura próxima da barra de busca */
+  min-width: 100px;
+}
+
+/* Hover e foco - muda para vermelho */
+.badge:hover,
+.badge:focus-visible {
+  background: var(--primary);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.5);
+  transform: translateY(-1px);
+}
+
+.badge:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(229, 9, 20, 0.3);
+}
+
+.header__actions nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px; /* altura próxima da barra de busca */
+  min-width: 100px;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* ============================
+   BOTÃO DE PERFIL (vermelho)
+============================ */
+.profile-menu__btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary);
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.25);
+}
+
+.profile-menu__btn .icon {
+  width: 20px;
+  height: 20px;
+  filter: invert(1);
+}
+
+.profile-menu__btn:hover,
+.profile-menu__btn:focus-visible {
+  background: #f6121d;
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.5);
+}
+

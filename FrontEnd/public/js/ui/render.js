@@ -1,18 +1,32 @@
-// ui/render.js - renderização de elementos
-import { $, $$, el } from './dom.js';
-import { initCarousel } from './carousel.js';
+import { $, $$ } from './dom.js';
 import { openModal } from './modal.js';
-import { addToMyList, removeFromMyList, isInMyList, getMyList } from '../state.js';
+import { addToMyList, removeFromMyList, getMyList } from '../state.js';
+import { getMovieById } from '../api.js';
 
+/* ============================
+   HEADER (com logo e logout)
+============================ */
 export function renderHeader(userName, countFavoritos) {
-  const header = $('.header');
+  const header = document.querySelector('.header');
   header.innerHTML = `
     <div class="header__inner container">
-      <a class="logo" href="./index.html" aria-label="UTFlix Home"><span class="logo__mark">UT</span>Flix</a>
+      <!-- LOGO -->
+      <a href="./index.html" class="logo" aria-label="UTFlix Home">
+        <span class="logo__mark">UT</span>Flix
+      </a>
+
+      <!-- BARRA DE BUSCA -->
       <label class="header__search" aria-label="Buscar catálogo">
-        <img class="icon" src="./assets/icons/search.svg" alt="" />
-        <input id="searchInput" type="search" placeholder="Buscar por título ou gênero" aria-controls="searchResults" />
+        <img class="icon" src="./assets/icons/search.svg" alt="Buscar" />
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Buscar por título ou gênero"
+          aria-controls="searchResults"
+        />
       </label>
+
+      <!-- AÇÕES DO HEADER -->
       <div class="header__actions">
         <nav aria-label="Categorias">
           <a class="badge" href="#" data-filter="all">Tudo</a>
@@ -20,96 +34,153 @@ export function renderHeader(userName, countFavoritos) {
           <a class="badge" href="#" data-filter="series">Séries</a>
           <a class="badge" href="#" data-filter="fav">Favoritos (${countFavoritos})</a>
         </nav>
+
+        <!-- MENU DE PERFIL -->
         <div class="profile-menu">
           <button class="profile-menu__btn" aria-haspopup="menu" aria-expanded="false">
-            <img class="icon" src="./assets/icons/user.svg" alt="" /> ${userName || 'Guest'}
+            <img class="icon" src="./assets/icons/user.svg" alt="Usuário" />
+            <span>${userName || 'Guest'}</span>
           </button>
           <div class="profile-menu__list" role="menu" aria-hidden="true">
-            <button class="profile-menu__item" role="menuitem" id="logoutBtn">Sair</button>
+            <button class="profile-menu__item" id="logoutBtn" role="menuitem">Sair</button>
           </div>
         </div>
       </div>
-    </div>`;
+    </div>
+  `;
 
-  // Toggle menu
-  const btn = $('.profile-menu__btn', header);
-  const list = $('.profile-menu__list', header);
-  btn.addEventListener('click', () => {
-    const expanded = btn.getAttribute('aria-expanded') === 'true';
-    btn.setAttribute('aria-expanded', String(!expanded));
-    list.setAttribute('aria-hidden', String(expanded));
+  /* === Interatividade do menu de perfil === */
+  const profileBtn = header.querySelector('.profile-menu__btn');
+  const profileList = header.querySelector('.profile-menu__list');
+
+  // abre/fecha menu
+  profileBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = profileList.getAttribute('aria-hidden') === 'false';
+    profileList.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+    profileBtn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+  });
+
+  // fecha ao clicar fora
+  document.addEventListener('click', (e) => {
+    if (!header.contains(e.target)) {
+      profileList.setAttribute('aria-hidden', 'true');
+      profileBtn.setAttribute('aria-expanded', 'false');
+    }
   });
 }
 
+/* ============================
+   HERO (filme principal)
+============================ */
 export function renderHero(movie) {
   const hero = $('#hero');
-  if (!movie) return hero.remove();
+  if (!movie) return;
   hero.innerHTML = `
-    <img class="hero__img" src="${movie.banner}" alt="Banner de ${movie.title}" />
-    <div class="hero__overlay" aria-hidden="true"></div>
+    <img src="${movie.banner}" alt="Banner de ${movie.title}" class="hero__img" />
+    <div class="hero__overlay"></div>
     <div class="hero__content">
-      <h1 class="hero__title">${movie.title}</h1>
-      <p>${movie.synopsis}</p>
+      <h2 class="hero__title">${movie.title}</h2>
+      <p>${movie.description}</p>
       <div class="hero__actions">
-        <button class="btn btn--primary" id="heroPlay"><img class="icon" src="./assets/icons/play.svg" alt="" /> Assistir</button>
-        <a class="btn btn--ghost" href="/movie.html?id=${movie.id}">Mais infos</a>
+        <button class="btn btn--primary" data-id="${movie.id}" data-action="play">▶ Assistir</button>
+        <a class="btn btn--ghost" href="./movie.html?id=${movie.id}">Mais infos</a>
       </div>
-    </div>`;
-  $('#heroPlay').addEventListener('click', () => openModal(movie.trailer || 'https://www.youtube.com/embed/dQw4w9WgXcQ'));
+    </div>
+  `;
+  hero.querySelector('[data-action="play"]').addEventListener('click', () => {
+    openModal(movie.trailer);
+  });
 }
 
+/* ============================
+   CARROSSEL DE FILMES
+============================ */
 export function renderCarousel(title, items, containerId) {
   const container = $(containerId);
-  container.innerHTML = '';
-  const section = el('section', { class: 'section' }, [
-    el('h2', { class: 'section__title' }, [title]),
-    el('div', { class: 'carousel', tabindex: '0', 'data-title': title, role: 'region', 'aria-label': title }, [
-      el('button', { class: 'carousel__btn carousel__btn--prev', 'aria-label': 'Anterior' }, [el('img', { class: 'icon', src: '/assets/icons/chevron-left.svg', alt: '' })]),
-      el('div', { class: 'carousel__track' }, items.map(cardFor)),
-      el('button', { class: 'carousel__btn carousel__btn--next', 'aria-label': 'Próximo' }, [el('img', { class: 'icon', src: '/assets/icons/chevron-right.svg', alt: '' })])
-    ])
-  ]);
-  container.append(section);
-  initCarousel(section.querySelector('.carousel'));
-}
+  if (!items?.length) return;
 
-function cardFor(m) {
-  const btnAdd = el('button', { class: 'icon-btn', title: isInMyList(m.id) ? 'Remover da Minha Lista' : 'Adicionar à Minha Lista' }, [
-    el('img', { class: 'icon', src: '/assets/icons/plus.svg', alt: '' })
-  ]);
-  btnAdd.addEventListener('click', () => {
-    const list = isInMyList(m.id) ? removeFromMyList(m.id) : addToMyList(m.id);
-    btnAdd.title = isInMyList(m.id) ? 'Remover da Minha Lista' : 'Adicionar à Minha Lista';
-    // Atualiza contador no header
-    const favLink = document.querySelector('[data-filter="fav"]');
-    favLink.textContent = `Favoritos (${list.length})`;
+  container.innerHTML = `
+    <section class="section" aria-label="${title}">
+      <h2 class="section__title">${title}</h2>
+      <div class="carousel">
+        <div class="carousel__track" tabindex="0">
+          ${items.map(movie => `
+            <div class="card" tabindex="0">
+              <img src="${movie.poster}" alt="Poster de ${movie.title}" class="card__img" />
+              <div class="card__meta">
+                <span class="card__title">${movie.title}</span>
+                <div class="card__actions">
+                  <button class="icon-btn" data-id="${movie.id}" data-action="play" title="Assistir">▶</button>
+                  <button class="icon-btn" data-id="${movie.id}" data-action="fav" title="Adicionar à lista">＋</button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+  `;
+
+  container.querySelectorAll('[data-action="play"]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const movie = await getMovieById(btn.dataset.id);
+      openModal(movie.trailer);
+    });
   });
 
-  const btnPlay = el('button', { class: 'icon-btn', title: 'Assistir', onclick: () => openModal(m.trailer) }, [
-    el('img', { class: 'icon', src: '/assets/icons/play.svg', alt: '' })
-  ]);
-
-  const a = el('a', { href: `/movie.html?id=${m.id}`, class: 'card', 'aria-label': `Abrir detalhes de ${m.title}` }, [
-    el('img', { class: 'card__img', src: m.poster, alt: `Poster de ${m.title}` }),
-    el('div', { class: 'card__meta' }, [
-      el('div', { class: 'card__title' }, [m.title]),
-      el('div', { class: 'card__actions' }, [btnPlay, btnAdd])
-    ])
-  ]);
-  return a;
+  container.querySelectorAll('[data-action="fav"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      if (getMyList().includes(id)) removeFromMyList(id);
+      else addToMyList(id);
+      btn.classList.toggle('active');
+    });
+  });
 }
 
+/* ============================
+   RESULTADOS DE BUSCA
+============================ */
 export function renderSearchResults(items) {
-  const container = $('#searchResults');
-  container.innerHTML = '';
-  if (!items.length) {
-    container.innerHTML = '<p role="status">Sem resultados</p>';
+  const area = $('#searchResults');
+  if (!items?.length) {
+    area.innerHTML = `<p>Nenhum resultado encontrado.</p>`;
     return;
   }
-  const grid = el('div', { class: 'carousel__track', style: 'grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));' }, items.map(cardFor));
-  container.append(grid);
+  area.innerHTML = `
+    <div class="carousel__track" style="grid-auto-columns: clamp(140px, 28vw, 220px);">
+      ${items.map(movie => `
+        <div class="card" tabindex="0">
+          <img src="${movie.poster}" alt="Poster de ${movie.title}" class="card__img" />
+          <div class="card__meta">
+            <span class="card__title">${movie.title}</span>
+            <div class="card__actions">
+              <button class="icon-btn" data-id="${movie.id}" data-action="play" title="Assistir">▶</button>
+              <button class="icon-btn" data-id="${movie.id}" data-action="fav" title="Adicionar à lista">＋</button>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
 }
 
+/* ============================
+   FILMES SEMELHANTES (detalhe)
+============================ */
 export function renderSimilar(items) {
-  renderCarousel('Semelhantes', items, '#similar');
+  const container = $('#similar');
+  if (!container || !items?.length) return;
+
+  container.innerHTML = `
+    <h3 class="section__title">Semelhantes</h3>
+    <div class="carousel__track">
+      ${items.map(movie => `
+        <a href="./movie.html?id=${movie.id}" class="card">
+          <img src="${movie.poster}" alt="Poster de ${movie.title}" class="card__img" />
+        </a>
+      `).join('')}
+    </div>
+  `;
 }
