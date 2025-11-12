@@ -128,3 +128,117 @@ body {
   animation: shimmer 1.2s infinite;
 }
 @keyframes shimmer { 100% { transform: translateX(100%); } }
+
+/* ============================= */
+/* Login page layout and styling */
+/* ============================= */
+
+.login {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.login__form {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: 380px; /* controla largura total dos campos */
+  background: var(--surface);
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.login__logo {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border-radius: 8px;
+  background: #1b1b23;
+  color: var(--text);
+  border: 1px solid transparent;
+  font-size: 1rem;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+.input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* botão Entrar */
+.btn--login {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 auto;
+  display: block;
+  width: fit-content;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn--login:hover {
+  background: #f6121d;
+  transform: translateY(-1px);
+}
+
+.btn--login:active {
+  transform: translateY(0);
+}
+
+/* botão convidado */
+.login__guest {
+  justify-content: center;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* texto de dica */
+.login__hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+/* ============================= */
+/* Botão de Logout no menu perfil */
+/* ============================= */
+.profile-menu__item#logoutBtn {
+  background: var(--primary);
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: block;
+  margin: 0.5rem auto;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.profile-menu__item#logoutBtn:hover {
+  background: #f6121d;
+  transform: translateY(-1px);
+}
+
+.profile-menu__item#logoutBtn:active {
+  transform: translateY(0);
+}

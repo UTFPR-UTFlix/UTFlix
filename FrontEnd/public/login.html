@@ -8,21 +8,27 @@
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
 <body>
-  <main class="container" style="display:grid; place-items:center; min-height: 100vh;">
-    <form id="loginForm" class="form" style="width:min(420px, 92vw);" novalidate aria-describedby="formError">
-      <h1 class="logo" style="font-size:2rem; margin-bottom:.5rem;"><span class="logo__mark">UT</span>Flix</h1>
+  <main class="login">
+    <form id="loginForm" class="form login__form" novalidate aria-describedby="formError">
+      <h1 class="logo login__logo"><span class="logo__mark">UT</span>Flix</h1>
+
       <label>
         <span class="visually-hidden">E-mail</span>
         <input id="email" class="input" type="email" placeholder="Seu e-mail" required autocomplete="email" />
       </label>
+
       <label>
         <span class="visually-hidden">Nome (opcional)</span>
         <input id="name" class="input" type="text" placeholder="Seu nome (opcional)" autocomplete="name" />
       </label>
-      <button class="btn btn--primary" type="submit">Entrar</button>
+
+      <button class="btn btn--login" type="submit">Entrar</button>
+
       <p id="formError" class="form__error" role="status" aria-live="polite"></p>
-      <a id="asGuest" href="#" class="btn btn--ghost" style="justify-content:center; text-align:center;">Continuar como convidado</a>
-      <p style="color:var(--muted); font-size:.9rem;">Dica: esta tela salva um token fake no localStorage e redireciona para a Home.</p>
+
+      <a id="asGuest" href="#" class="btn btn--ghost login__guest">Continuar como convidado</a>
+
+      <p class="login__hint">Dica: esta tela salva um token fake no localStorage e redireciona para a Home.</p>
     </form>
   </main>
   <script type="module" src="./login.js"></script>
