@@ -1,29 +1,44 @@
-version: '3.8'
-
 services:
-  # Serviço do Banco de Dados PostgreSQL
   db:
     image: postgres:14-alpine
     container_name: UTFlix-postgres
     restart: always
-    ports:
-      - "5432:5432" # Expõe a porta do Postgres para o seu computador
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: minhaapi
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data # Garante que os dados do banco não se percam
-
-  # Serviço da Aplicação Node.js
-  app:
-    build: . # Constrói a imagem a partir do Dockerfile na pasta atual
-    container_name: UTFlix-app
     ports:
-      - "3000:3000" # Expõe a porta da API
+      - "5432:5432"
     volumes:
-      - ./src:/usr/app/src # Mapeia seu código local para dentro do contêiner
+      - ./pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d minhaapi -h localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  cliente-service:
+    build: ./cliente-service
+    ports:
+      - "3000:3000"
     depends_on:
-      - db # Garante que o banco de dados inicie antes da aplicação
+      db:
+        condition: service_healthy
     environment:
-      DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=public" 
+      # Schema 'cliente'
+      DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=cliente"
+    # Este comando está correto
+    command: sh -c "npx prisma migrate dev && npm run dev"
+
+  filmes-service:
+    build: ./filmes-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Schema 'filmes'
+      DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=filmes"
+    # Este comando agora vai funcionar
+    command: sh -c "sleep 10 && npx prisma migrate dev && npm run dev"

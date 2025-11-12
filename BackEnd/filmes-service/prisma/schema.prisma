@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- MODELOS DE FILME/GÊNERO (Originais) ---
+
+model Filme {
+  idFilme       Int          @id @default(autoincrement())
+  titulo        String
+  anoLancamento Int
+  createdAt     DateTime     @default(now())
+
+  generos       FilmeGenero[]
+  atores        FilmeAtor[] // Adicionando a relação de atores
+}
+
+model Genero {
+  idGenero Int    @id @default(autoincrement())
+  genero   String @unique
+  filmes   FilmeGenero[]
+}
+
+model FilmeGenero {
+  idFilmeGenero Int     @id @default(autoincrement())
+  principal     Boolean @default(false)
+
+  idFilme Int
+  filme   Filme @relation(fields: [idFilme], references: [idFilme], onDelete: Cascade)
+
+  idGenero Int
+  genero   Genero @relation(fields: [idGenero], references: [idGenero], onDelete: Cascade)
+
+  @@unique([idFilme, idGenero])
+}
+
+// --- MODELOS DE ATOR (Novos) ---
+
+model Ator {
+  idAtor Int    @id @default(autoincrement())
+  nome   String
+  filmes FilmeAtor[]
+}
+
+model FilmeAtor {
+  idFilmeAtor Int     @id @default(autoincrement())
+  personagem  String?
+  principal   Boolean @default(false)
+
+  idFilme Int
+  filme   Filme @relation(fields: [idFilme], references: [idFilme], onDelete: Cascade)
+
+  idAtor Int
+  ator   Ator  @relation(fields: [idAtor], references: [idAtor], onDelete: Cascade)
+
+  @@unique([idFilme, idAtor])
+}
