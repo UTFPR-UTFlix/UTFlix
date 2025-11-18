@@ -63,8 +63,6 @@ export default {
           anoLancamento: { type: "integer" },
           rating: { type: "number" },
           duration: { type: "string" },
-          rating: { type: "number" },
-          duration: { type: "string" },
           generos: {
             type: "array",
             items: {
