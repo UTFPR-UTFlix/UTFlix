@@ -1,7 +1,9 @@
 import { $, $$ } from './dom.js';
 import { openModal } from './modal.js';
 import { addToMyList, removeFromMyList, getMyList } from '../state.js';
-import { getMovieById } from '../api.js';
+import { getMovieById, addFavorite, removeFavorite } from '../api.js';
+import { getProfile } from '../auth.js';
+import { initCarouselsIn } from './carousel.js';
 
 /* ============================
    HEADER (com logo e logout)
@@ -10,23 +12,15 @@ export function renderHeader(userName, countFavoritos) {
   const header = document.querySelector('.header');
   header.innerHTML = `
     <div class="header__inner container">
-      <!-- LOGO -->
       <a href="./index.html" class="logo" aria-label="UTFlix Home">
         <span class="logo__mark">UT</span>Flix
       </a>
 
-      <!-- BARRA DE BUSCA -->
       <label class="header__search" aria-label="Buscar catálogo">
         <img class="icon" src="./assets/icons/search.svg" alt="Buscar" />
-        <input
-          id="searchInput"
-          type="search"
-          placeholder="Buscar por título ou gênero"
-          aria-controls="searchResults"
-        />
+        <input id="searchInput" type="search" placeholder="Buscar por título ou gênero" aria-controls="searchResults"/>
       </label>
 
-      <!-- AÇÕES DO HEADER -->
       <div class="header__actions">
         <nav aria-label="Categorias">
           <a class="badge" href="#" data-filter="all">Tudo</a>
@@ -35,7 +29,6 @@ export function renderHeader(userName, countFavoritos) {
           <a class="badge" href="#" data-filter="fav">Favoritos (${countFavoritos})</a>
         </nav>
 
-        <!-- MENU DE PERFIL -->
         <div class="profile-menu">
           <button class="profile-menu__btn" aria-haspopup="menu" aria-expanded="false">
             <img class="icon" src="./assets/icons/user.svg" alt="Usuário" />
@@ -49,11 +42,8 @@ export function renderHeader(userName, countFavoritos) {
     </div>
   `;
 
-  /* === Interatividade do menu de perfil === */
   const profileBtn = header.querySelector('.profile-menu__btn');
   const profileList = header.querySelector('.profile-menu__list');
-
-  // abre/fecha menu
   profileBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     const isOpen = profileList.getAttribute('aria-hidden') === 'false';
@@ -61,7 +51,6 @@ export function renderHeader(userName, countFavoritos) {
     profileBtn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
   });
 
-  // fecha ao clicar fora
   document.addEventListener('click', (e) => {
     if (!header.contains(e.target)) {
       profileList.setAttribute('aria-hidden', 'true');
@@ -103,10 +92,12 @@ export function renderCarousel(title, items, containerId) {
   container.innerHTML = `
     <section class="section" aria-label="${title}">
       <h2 class="section__title">${title}</h2>
-      <div class="carousel">
-        <div class="carousel__track" tabindex="0">
+      <div class="carousel" data-title="${title}">
+        <button class="carousel__btn carousel__btn--prev" aria-label="Anterior">‹</button>
+
+        <div class="carousel__track">
           ${items.map(movie => `
-            <div class="card" tabindex="0">
+            <a href="./movie.html?id=${movie.id}" class="card" tabindex="0">
               <img src="${movie.poster}" alt="Poster de ${movie.title}" class="card__img" />
               <div class="card__meta">
                 <span class="card__title">${movie.title}</span>
@@ -115,28 +106,42 @@ export function renderCarousel(title, items, containerId) {
                   <button class="icon-btn" data-id="${movie.id}" data-action="fav" title="Adicionar à lista">＋</button>
                 </div>
               </div>
-            </div>
+            </a>
           `).join('')}
         </div>
+
+        <button class="carousel__btn carousel__btn--next" aria-label="Próximo">›</button>
       </div>
     </section>
   `;
 
   container.querySelectorAll('[data-action="play"]').forEach(btn => {
-    btn.addEventListener('click', async () => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
       const movie = await getMovieById(btn.dataset.id);
       openModal(movie.trailer);
     });
   });
 
   container.querySelectorAll('[data-action="fav"]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
       const id = btn.dataset.id;
-      if (getMyList().includes(id)) removeFromMyList(id);
-      else addToMyList(id);
-      btn.classList.toggle('active');
+      const { idCliente } = getProfile();
+      try {
+        if (getMyList().includes(id)) {
+          removeFromMyList(id);
+          if (idCliente) await removeFavorite(idCliente, id);
+        } else {
+          addToMyList(id);
+          if (idCliente) await addFavorite(idCliente, id);
+        }
+        btn.classList.toggle('active');
+      } catch {}
     });
   });
+
+  initCarouselsIn(container);
 }
 
 /* ============================
@@ -148,26 +153,33 @@ export function renderSearchResults(items) {
     area.innerHTML = `<p>Nenhum resultado encontrado.</p>`;
     return;
   }
+
   area.innerHTML = `
-    <div class="carousel__track" style="grid-auto-columns: clamp(140px, 28vw, 220px);">
-      ${items.map(movie => `
-        <div class="card" tabindex="0">
-          <img src="${movie.poster}" alt="Poster de ${movie.title}" class="card__img" />
-          <div class="card__meta">
-            <span class="card__title">${movie.title}</span>
-            <div class="card__actions">
-              <button class="icon-btn" data-id="${movie.id}" data-action="play" title="Assistir">▶</button>
-              <button class="icon-btn" data-id="${movie.id}" data-action="fav" title="Adicionar à lista">＋</button>
+    <div class="carousel" data-title="Resultados da busca">
+      <button class="carousel__btn carousel__btn--prev" aria-label="Anterior">‹</button>
+      <div class="carousel__track">
+        ${items.map(movie => `
+          <a href="./movie.html?id=${movie.id}" class="card" tabindex="0">
+            <img src="${movie.poster}" alt="Poster de ${movie.title}" class="card__img" />
+            <div class="card__meta">
+              <span class="card__title">${movie.title}</span>
+              <div class="card__actions">
+                <button class="icon-btn" data-id="${movie.id}" data-action="play" title="Assistir">▶</button>
+                <button class="icon-btn" data-id="${movie.id}" data-action="fav" title="Adicionar à lista">＋</button>
+              </div>
             </div>
-          </div>
-        </div>
-      `).join('')}
+          </a>
+        `).join('')}
+      </div>
+      <button class="carousel__btn carousel__btn--next" aria-label="Próximo">›</button>
     </div>
   `;
+
+  initCarouselsIn(area);
 }
 
 /* ============================
-   FILMES SEMELHANTES (detalhe)
+   FILMES SEMELHANTES
 ============================ */
 export function renderSimilar(items) {
   const container = $('#similar');
@@ -175,12 +187,18 @@ export function renderSimilar(items) {
 
   container.innerHTML = `
     <h3 class="section__title">Semelhantes</h3>
-    <div class="carousel__track">
-      ${items.map(movie => `
-        <a href="./movie.html?id=${movie.id}" class="card">
-          <img src="${movie.poster}" alt="Poster de ${movie.title}" class="card__img" />
-        </a>
-      `).join('')}
+    <div class="carousel" data-title="Semelhantes">
+      <button class="carousel__btn carousel__btn--prev" aria-label="Anterior">‹</button>
+      <div class="carousel__track">
+        ${items.map(movie => `
+          <a href="./movie.html?id=${movie.id}" class="card">
+            <img src="${movie.poster}" alt="Poster de ${movie.title}" class="card__img" />
+          </a>
+        `).join('')}
+      </div>
+      <button class="carousel__btn carousel__btn--next" aria-label="Próximo">›</button>
     </div>
   `;
+
+  initCarouselsIn(container);
 }

@@ -1,0 +1,34 @@
+// Arquivo: /prisma/schema.prisma
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  senha     String
+  createdAt DateTime @default(now())
+
+  // RELAÇÃO ADICIONADA: Um cliente pode ter vários filmes favoritos
+  filmesFavoritos ClienteFilmeFavorito[]
+}
+
+// MODELO ADICIONADO: Tabela de junção para os favoritos
+model ClienteFilmeFavorito {
+  id        Int @id @default(autoincrement())
+  idFilme   Int // Este é o ID do filme (que vem do seu 'filmes-service')
+
+  idCliente Int
+  cliente   Cliente @relation(fields: [idCliente], references: [id], onDelete: Cascade)
+
+  // Garante que um cliente não possa favoritar o mesmo filme duas vezes
+  @@unique([idCliente, idFilme])
+}

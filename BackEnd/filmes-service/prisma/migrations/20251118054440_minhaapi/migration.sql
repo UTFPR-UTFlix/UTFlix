@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Filme" ADD COLUMN     "duration" TEXT NOT NULL DEFAULT '120 min',
+ADD COLUMN     "rating" DOUBLE PRECISION NOT NULL DEFAULT 0.0;

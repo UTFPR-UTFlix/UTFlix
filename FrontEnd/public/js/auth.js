@@ -9,10 +9,10 @@ export function requireAuth() {
   }
 }
 
-export function saveSession({ email, name }) {
-  const token = 'fake-' + Math.random().toString(36).slice(2);
-  localStorage.setItem(TOKEN_KEY, token);
-  localStorage.setItem(PROFILE_KEY, JSON.stringify({ email, name: name || 'Guest' }));
+export function saveSession({ email, name, token, idCliente }) {
+  const t = token || ('fake-' + Math.random().toString(36).slice(2));
+  localStorage.setItem(TOKEN_KEY, t);
+  localStorage.setItem(PROFILE_KEY, JSON.stringify({ email, name: name || 'Guest', idCliente }));
 }
 
 export function logout() {
@@ -30,6 +30,7 @@ export function getProfile() {
 export function initLogin() {
   const form = document.querySelector('#loginForm');
   const email = document.querySelector('#email');
+  const password = document.querySelector('#password');
   const name = document.querySelector('#name');
   const error = document.querySelector('#formError');
   const guest = document.querySelector('#asGuest');
@@ -38,16 +39,37 @@ export function initLogin() {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   }
 
-  form?.addEventListener('submit', (e) => {
+  const BASE = 'http://localhost:3000';
+  async function callLogin(emailVal, senhaVal, nameVal) {
+    const headers = { 'Content-Type': 'application/json' };
+    const res = await fetch(`${BASE}/clientes/login`, { method: 'POST', headers, body: JSON.stringify({ email: emailVal, senha: senhaVal }) });
+    if (!res.ok) throw new Error('Login inválido');
+    const data = await res.json();
+    saveSession({ email: emailVal, name: nameVal, token: data.token, idCliente: data.idCliente });
+  }
+  async function callRegister(nameVal, emailVal, senhaVal) {
+    const headers = { 'Content-Type': 'application/json' };
+    const res = await fetch(`${BASE}/clientes/registrar`, { method: 'POST', headers, body: JSON.stringify({ nome: nameVal || 'Guest', email: emailVal, senha: senhaVal }) });
+    if (!res.ok) throw new Error('Registro inválido');
+    await callLogin(emailVal, senhaVal, nameVal || 'Guest');
+  }
+
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     error.textContent = '';
-    if (!validateEmail(email.value)) {
-      error.textContent = 'Por favor, informe um e-mail válido.';
-      email.focus();
-      return;
-    }
-    saveSession({ email: email.value, name: name.value.trim() });
-    location.replace('index.html');
+    if (!validateEmail(email.value)) { error.textContent = 'Por favor, informe um e-mail válido.'; email.focus(); return; }
+    if (!password.value) { error.textContent = 'Informe sua senha.'; password.focus(); return; }
+    try { await callLogin(email.value, password.value, name.value.trim()); location.replace('index.html'); }
+    catch { error.textContent = 'Login inválido.'; }
+  });
+
+  document.querySelector('#registerBtn')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    error.textContent = '';
+    if (!validateEmail(email.value)) { error.textContent = 'Por favor, informe um e-mail válido.'; email.focus(); return; }
+    if (!password.value) { error.textContent = 'Informe sua senha.'; password.focus(); return; }
+    try { await callRegister(name.value.trim(), email.value, password.value); location.replace('index.html'); }
+    catch { error.textContent = 'Registro inválido.'; }
   });
 
   guest?.addEventListener('click', (e) => {
