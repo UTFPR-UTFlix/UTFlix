@@ -62,7 +62,7 @@ async function loginCliente(email, senha) {
     { expiresIn: "1h" } // Token expira em 1 hora
   );
 
-  return { token };
+  return { token, idCliente: cliente.id };
 }
 
 /**
@@ -175,6 +175,16 @@ async function removeFilmeFavorito(idCliente, idFilme) {
   });
 }
 
+async function getFavoritosCliente(idCliente) {
+  const clienteId = parseInt(idCliente);
+  if (isNaN(clienteId)) throw new Error("ID inválido.");
+  const favoritos = await prisma.clienteFilmeFavorito.findMany({
+    where: { idCliente: clienteId },
+    select: { idFilme: true },
+  });
+  return favoritos.map(f => f.idFilme);
+}
+
 module.exports = {
   listarClientes,
   criarCliente,
@@ -184,5 +194,6 @@ module.exports = {
   deleteCliente,
   addFilmeFavorito,
   removeFilmeFavorito,
+  getFavoritosCliente,
   // (getClienteById já retorna a lista de favoritos)
 };

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 // --- MODELOS DE FILME/GÊNERO (Originais) ---
@@ -14,6 +14,8 @@ model Filme {
   titulo        String
   anoLancamento Int
   createdAt     DateTime     @default(now())
+  rating        Float        @default(0.0)
+  duration      String       @default("120 min")
 
   generos       FilmeGenero[]
   atores        FilmeAtor[] // Adicionando a relação de atores

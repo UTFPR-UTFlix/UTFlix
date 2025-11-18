@@ -61,7 +61,7 @@ export async function getFilmeById(id) {
  */
 export async function addFilme(filmeData) {
   // 1. DESESTRUTURAR 'atores'
-  const { titulo, anoLancamento, generos, atores } = filmeData;
+  const { titulo, anoLancamento, generos, atores, rating, duration } = filmeData;
 
   // 2. ATUALIZAR VALIDAÇÃO
   if (!titulo || !anoLancamento || !generos || !Array.isArray(generos) || generos.length === 0) {
@@ -104,10 +104,12 @@ export async function addFilme(filmeData) {
     data: {
       titulo: titulo,
       anoLancamento: anoLancamento,
+      rating: rating ?? 0.0,
+      duration: duration ?? "120 min",
       generos: {
         create: generosParaCriar,
       },
-      atores: { // ADICIONAR ESTA SEÇÃO
+      atores: {
         create: atoresParaCriar,
       },
     },
@@ -140,7 +142,7 @@ export async function updateFilme(id, filmeData) {
   }
 
   // 1. DESESTRUTURAR 'atores'
-  const { titulo, anoLancamento, generos, atores } = filmeData;
+  const { titulo, anoLancamento, generos, atores, rating, duration } = filmeData;
 
   // 2. PREPARAR DADOS BÁSICOS (como antes)
   const updateData = {};
@@ -149,6 +151,12 @@ export async function updateFilme(id, filmeData) {
   }
   if (anoLancamento !== undefined) {
     updateData.anoLancamento = anoLancamento;
+  }
+  if (rating !== undefined) {
+    updateData.rating = rating;
+  }
+  if (duration !== undefined) {
+    updateData.duration = duration;
   }
 
   // 3. ATUALIZAR GÊNEROS (como antes)

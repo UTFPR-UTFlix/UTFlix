@@ -18,17 +18,25 @@
       </label>
 
       <label>
+        <span class="visually-hidden">Senha</span>
+        <input id="password" class="input" type="password" placeholder="Sua senha" required autocomplete="current-password" />
+      </label>
+
+      <label>
         <span class="visually-hidden">Nome (opcional)</span>
         <input id="name" class="input" type="text" placeholder="Seu nome (opcional)" autocomplete="name" />
       </label>
 
-      <button class="btn btn--login" type="submit">Entrar</button>
+      <div class="login__actions">
+        <button class="btn btn--login" type="submit">Entrar</button>
+        <button class="btn btn--ghost" type="button" id="registerBtn">Criar conta</button>
+      </div>
 
       <p id="formError" class="form__error" role="status" aria-live="polite"></p>
 
       <a id="asGuest" href="#" class="btn btn--ghost login__guest">Continuar como convidado</a>
 
-      <p class="login__hint">Dica: esta tela salva um token fake no localStorage e redireciona para a Home.</p>
+      <p class="login__hint">Esta tela usa a API de Clientes para login e registro.</p>
     </form>
   </main>
   <script type="module" src="./login.js"></script>

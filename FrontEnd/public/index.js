@@ -1,5 +1,5 @@
 import { requireAuth, getProfile, logout } from './js/auth.js';
-import { getMovies, demoClientes } from './js/api.js';
+import { getMovies, demoClientes, getFavorites } from './js/api.js';
 import { renderHeader, renderHero, renderCarousel, renderSearchResults } from './js/ui/render.js';
 import { $, $$ } from './js/ui/dom.js';
 import { getMyList } from './js/state.js';
@@ -41,14 +41,20 @@ requireAuth();
   });
 
   document.querySelectorAll('[data-filter]').forEach(el => {
-    el.addEventListener('click', (e) => {
+    el.addEventListener('click', async (e) => {
       e.preventDefault();
       const type = el.dataset.filter;
-      const list =
-        type === 'movie' ? movies.filter(m => m.type === 'movie') :
-        type === 'series' ? movies.filter(m => m.type === 'series') :
-        type === 'fav' ? movies.filter(m => getMyList().includes(String(m.id))) :
-        movies;
+      let list;
+      if (type === 'movie') {
+        list = movies.filter(m => m.type === 'movie');
+      } else if (type === 'series') {
+        list = movies.filter(m => m.type === 'series');
+      } else if (type === 'fav') {
+        const ids = profile.idCliente ? await getFavorites(profile.idCliente).catch(() => getMyList()) : getMyList();
+        list = movies.filter(m => ids.includes(String(m.id)));
+      } else {
+        list = movies;
+      }
       renderSearchResults(list);
       $('#searchInput').focus();
     });

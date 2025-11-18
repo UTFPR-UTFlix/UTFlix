@@ -14,6 +14,7 @@ router.delete("/:id", clienteController.deletar);   // DELETE /clientes/1
 
 // Rotas de Favoritos
 // (Nota: Em um sistema real, o 'idCliente' viria do token JWT, não da URL)
+router.get("/:id/favoritos", clienteController.listarFavoritos);           // GET /clientes/1/favoritos -> [idFilme]
 router.post("/:id/favoritos", clienteController.adicionarFavorito);        // POST /clientes/1/favoritos (Body: { "idFilme": 123 })
 router.delete("/:id/favoritos/:idFilme", clienteController.removerFavorito); // DELETE /clientes/1/favoritos/123
 

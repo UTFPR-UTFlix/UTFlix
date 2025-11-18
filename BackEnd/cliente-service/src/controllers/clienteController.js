@@ -33,8 +33,8 @@ async function criar(req, res) {
 async function login(req, res) {
   try {
     const { email, senha } = req.body;
-    const { token } = await clienteService.loginCliente(email, senha);
-    res.status(200).json({ token });
+    const { token, idCliente } = await clienteService.loginCliente(email, senha);
+    res.status(200).json({ token, idCliente });
   } catch (error) {
     // Erro de "Email ou senha inválidos." vem do service
     res.status(401).json({ error: error.message });
@@ -115,6 +115,16 @@ async function removerFavorito(req, res) {
   }
 }
 
+async function listarFavoritos(req, res) {
+  try {
+    const { id: idCliente } = req.params;
+    const favoritos = await clienteService.getFavoritosCliente(idCliente);
+    res.status(200).json(favoritos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   listar,
   criar,
@@ -124,4 +134,5 @@ module.exports = {
   deletar,
   adicionarFavorito,
   removerFavorito,
+  listarFavoritos,
 };
