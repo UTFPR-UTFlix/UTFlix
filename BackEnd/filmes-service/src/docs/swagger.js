@@ -15,6 +15,8 @@ export default {
           idFilme: { type: "integer" },
           titulo: { type: "string" },
           anoLancamento: { type: "integer" },
+          rating: { type: "number" },
+          duration: { type: "string" },
           createdAt: { type: "string", format: "date-time" },
           generos: {
             type: "array",
@@ -59,6 +61,10 @@ export default {
         properties: {
           titulo: { type: "string" },
           anoLancamento: { type: "integer" },
+          rating: { type: "number" },
+          duration: { type: "string" },
+          rating: { type: "number" },
+          duration: { type: "string" },
           generos: {
             type: "array",
             items: {

@@ -15,6 +15,7 @@ const options = {
           type: "object",
           properties: {
             id: { type: "integer" },
+            senha: { type: "string" },
             nome: { type: "string" },
             email: { type: "string" },
             createdAt: { type: "string", format: "date-time" },
@@ -131,6 +132,16 @@ const options = {
         },
       },
       "/clientes/{id}/favoritos": {
+        get: {
+          summary: "Lista favoritos do cliente",
+          parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }],
+          responses: {
+            "200": {
+              description: "OK",
+              content: { "application/json": { schema: { type: "array", items: { $ref: "#/components/schemas/Favorito" } } } },
+            },
+          },
+        },
         post: {
           summary: "Adiciona favorito",
           parameters: [{ name: "id", in: "path", required: true, schema: { type: "integer" } }],

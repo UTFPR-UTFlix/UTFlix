@@ -1,7 +1,8 @@
 import { $, $$ } from './dom.js';
 import { openModal } from './modal.js';
 import { addToMyList, removeFromMyList, getMyList } from '../state.js';
-import { getMovieById } from '../api.js';
+import { getMovieById, addFavorite, removeFavorite } from '../api.js';
+import { getProfile } from '../auth.js';
 import { initCarouselsIn } from './carousel.js';
 
 /* ============================
@@ -123,12 +124,20 @@ export function renderCarousel(title, items, containerId) {
   });
 
   container.querySelectorAll('[data-action="fav"]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', async (e) => {
       e.preventDefault();
       const id = btn.dataset.id;
-      if (getMyList().includes(id)) removeFromMyList(id);
-      else addToMyList(id);
-      btn.classList.toggle('active');
+      const { idCliente } = getProfile();
+      try {
+        if (getMyList().includes(id)) {
+          removeFromMyList(id);
+          if (idCliente) await removeFavorite(idCliente, id);
+        } else {
+          addToMyList(id);
+          if (idCliente) await addFavorite(idCliente, id);
+        }
+        btn.classList.toggle('active');
+      } catch {}
     });
   });
 

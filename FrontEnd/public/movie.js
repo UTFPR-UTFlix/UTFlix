@@ -1,9 +1,9 @@
 import { requireAuth, getProfile, logout } from './js/auth.js';
-import { getMovieById, getMovies } from './js/api.js';
+import { getMovieById, getMovies, addFavorite, removeFavorite } from './js/api.js';
 import { renderHeader, renderSimilar } from './js/ui/render.js';
 import { $, el } from './js/ui/dom.js';
 import { openModal } from './js/ui/modal.js';
-import { addToMyList, isInMyList, getMyList } from './js/state.js';
+import { addToMyList, isInMyList, getMyList, removeFromMyList } from './js/state.js';
 
 requireAuth();
 
@@ -40,9 +40,21 @@ requireAuth();
     </div>`;
 
   document.querySelector('#btnPlay').addEventListener('click', () => openModal(movie.trailer));
-  document.querySelector('#btnFav').addEventListener('click', (e) => {
-    addToMyList(movie.id);
-    e.target.textContent = 'Adicionado!';
+  document.querySelector('#btnFav').addEventListener('click', async (e) => {
+    const { idCliente } = getProfile();
+    try {
+      if (isInMyList(movie.id)) {
+        removeFromMyList(movie.id);
+        if (idCliente) await removeFavorite(idCliente, movie.id);
+        e.target.textContent = 'Removido da Minha Lista';
+      } else {
+        addToMyList(movie.id);
+        if (idCliente) await addFavorite(idCliente, movie.id);
+        e.target.textContent = 'Adicionado!';
+      }
+    } catch {
+      e.target.textContent = 'Tente novamente';
+    }
   });
 
   // semelhantes (mesmo primeiro gênero)
