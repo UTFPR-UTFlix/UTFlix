@@ -1,0 +1,56 @@
+openapi: 3.0.3
+info:
+  title: UTFlix - Serviço de Clientes
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /clientes:
+    get:
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cliente'
+  /clientes/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Cliente
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Cliente' }
+        '404': { description: Não encontrado }
+  /clientes/{id}/favoritos:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: IDs de filmes favoritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: integer }
+components:
+  schemas:
+    Cliente:
+      type: object
+      properties:
+        id: { type: integer }
+        nome: { type: string }
+        email: { type: string }
+        createdAt: { type: string, format: date-time }

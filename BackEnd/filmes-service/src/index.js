@@ -16,4 +16,7 @@ app.use("/generos", generoRouter);
 app.use("/atores", atorRouter); // 2. USAR
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`🎬 Filme service rodando na porta ${PORT}`));
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => console.log(`🎬 Filme service rodando na porta ${PORT}`));
+}
+export default app;
