@@ -26,4 +26,4 @@ describe('Filmes contract', () => {
     expect([200, 404]).toContain(res.status);
     expect(res).toSatisfyApiSpec();
   });
-});s
+});
