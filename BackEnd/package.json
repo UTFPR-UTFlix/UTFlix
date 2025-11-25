@@ -9,8 +9,9 @@
     "filmes-service"
   ],
   "scripts": {
-    "lint": "npm run lint --workspaces"
-    
+    "lint": "npm run lint --workspaces",
+    "test": "npm --workspaces --if-present run test -- --runInBand",
+    "test:all": "npm --workspaces --if-present run test -- --runInBand"
   },
   "keywords": [],
   "author": "",
