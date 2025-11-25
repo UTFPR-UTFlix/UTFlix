@@ -1,8 +1,7 @@
-# Imagem base do Node.js
 FROM node:18-alpine
-
-# Define o diretório de trabalho
+RUN apk add --no-cache openssl libc6-compat
 WORKDIR /usr/app
+ENV NODE_ENV=development
 
 # Copia apenas os arquivos de dependência
 COPY package*.json ./
