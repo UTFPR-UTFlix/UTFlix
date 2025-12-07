@@ -2,13 +2,17 @@
 import express from "express";
 import cors from "cors";
 import pagamentoRoutes from "./routes/pagamentoRoutes.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./docs/swagger.js";
 
 const app = express();
 const PORT = 3002;
 
 // Middlewares
 app.use(cors());
-app.use(express.json()); // Permite que o Express leia o corpo da requisição em JSON
+app.use(express.json());
+// Swagger
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Rota de saúde simples
 app.get('/', (req, res) => {

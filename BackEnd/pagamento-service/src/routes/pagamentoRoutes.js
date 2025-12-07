@@ -8,18 +8,19 @@ import {
   atualizarPagamento,
   removerPagamento,
 } from "../controllers/pagamentoController.js";
+import auth from "../middleware/auth.js";
+import { createPagamentoValidator, updatePagamentoValidator, handleValidationErrors } from "../validators/pagamentoValidators.js";
 
 const router = express.Router();
+router.use(auth);
 
-// Rotas para /pagamentos
 router.route("/")
-  .get(listarPagamentos) 
-  .post(criarPagamento);
+  .get(listarPagamentos)
+  .post(createPagamentoValidator, handleValidationErrors, criarPagamento);
 
-// Rotas para /pagamentos/:id
 router.route("/:id")
   .get(buscarPagamento)
-  .put(atualizarPagamento)
+  .put(updatePagamentoValidator, handleValidationErrors, atualizarPagamento)
   .delete(removerPagamento);
 
 export default router;

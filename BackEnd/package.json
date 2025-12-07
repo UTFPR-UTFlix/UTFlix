@@ -6,7 +6,8 @@
   "private": true,
   "workspaces": [
     "cliente-service",
-    "filmes-service"
+    "filmes-service",
+    "pagamento-service"
   ],
   "scripts": {
     "lint": "npm run lint --workspaces",

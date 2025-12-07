@@ -1,21 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const clienteController = require("../controllers/clienteController");
+const auth = require("../middleware/auth");
+const { registrarValidator, loginValidator, updateClienteValidator, favoritoValidator, handleValidationErrors } = require("../validators/clienteValidators");
 
 // Rotas de Autenticação
-router.post("/registrar", clienteController.criar); // POST /clientes/registrar
-router.post("/login", clienteController.login);     // POST /clientes/login
+router.post("/registrar", registrarValidator, handleValidationErrors, clienteController.criar); // POST /clientes/registrar
+router.post("/login", loginValidator, handleValidationErrors, clienteController.login);     // POST /clientes/login
 
 // Rotas de CRUD
-router.get("/", clienteController.listar);          // GET /clientes
-router.get("/:id", clienteController.buscarPorId);  // GET /clientes/1
-router.put("/:id", clienteController.atualizar);    // PUT /clientes/1
-router.delete("/:id", clienteController.deletar);   // DELETE /clientes/1
+router.get("/", clienteController.listar);
+router.get("/:id", auth, auth.ensureSelf, clienteController.buscarPorId);
+router.put("/:id", auth, auth.ensureSelf, updateClienteValidator, handleValidationErrors, clienteController.atualizar);
+router.delete("/:id", auth, auth.ensureSelf, clienteController.deletar);
 
 // Rotas de Favoritos
-// (Nota: Em um sistema real, o 'idCliente' viria do token JWT, não da URL)
-router.get("/:id/favoritos", clienteController.listarFavoritos);           // GET /clientes/1/favoritos -> [idFilme]
-router.post("/:id/favoritos", clienteController.adicionarFavorito);        // POST /clientes/1/favoritos (Body: { "idFilme": 123 })
-router.delete("/:id/favoritos/:idFilme", clienteController.removerFavorito); // DELETE /clientes/1/favoritos/123
+router.get("/:id/favoritos", auth, auth.ensureSelf, clienteController.listarFavoritos);
+router.post("/:id/favoritos", auth, auth.ensureSelf, favoritoValidator, handleValidationErrors, clienteController.adicionarFavorito);
+router.delete("/:id/favoritos/:idFilme", auth, auth.ensureSelf, clienteController.removerFavorito);
 
 module.exports = router;
