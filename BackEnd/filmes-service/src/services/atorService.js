@@ -1,13 +1,14 @@
-import { PrismaClient } from "@prisma/client";
+// src/services/atorService.js
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 /**
  * Lista todos os atores.
  */
-export async function getAllAtores() {
+async function getAllAtores() {
   return prisma.ator.findMany({
     orderBy: {
-      nome: "asc",
+      nome: 'asc',
     },
   });
 }
@@ -15,18 +16,18 @@ export async function getAllAtores() {
 /**
  * Busca um ator pelo ID, incluindo os filmes associados.
  */
-export async function getAtorById(id) {
-  const atorId = parseInt(id);
+async function getAtorById(id) {
+  const atorId = parseInt(id, 10);
   if (isNaN(atorId)) {
-    throw new Error("ID do ator inválido.");
+    throw new Error('ID do ator inválido.');
   }
 
   return prisma.ator.findUnique({
     where: { idAtor: atorId },
     include: {
-      filmes: { // Relação em 'Ator' -> 'FilmeAtor'
+      filmes: {
         include: {
-          filme: true, // Relação em 'FilmeAtor' -> 'Filme'
+          filme: true,
         },
       },
     },
@@ -36,10 +37,10 @@ export async function getAtorById(id) {
 /**
  * Cria um novo ator.
  */
-export async function createAtor(atorData) {
+async function createAtor(atorData) {
   const { nome } = atorData;
-  if (!nome || nome.trim() === "") {
-    throw new Error("O nome do ator é obrigatório.");
+  if (!nome || nome.trim() === '') {
+    throw new Error('O nome do ator é obrigatório.');
   }
 
   return prisma.ator.create({
@@ -52,15 +53,15 @@ export async function createAtor(atorData) {
 /**
  * Atualiza o nome de um ator.
  */
-export async function updateAtor(id, atorData) {
-  const atorId = parseInt(id);
+async function updateAtor(id, atorData) {
+  const atorId = parseInt(id, 10);
   if (isNaN(atorId)) {
-    throw new Error("ID do ator inválido.");
+    throw new Error('ID do ator inválido.');
   }
 
   const { nome } = atorData;
-  if (!nome || nome.trim() === "") {
-    throw new Error("O nome do ator é obrigatório.");
+  if (!nome || nome.trim() === '') {
+    throw new Error('O nome do ator é obrigatório.');
   }
 
   return prisma.ator.update({
@@ -74,10 +75,10 @@ export async function updateAtor(id, atorData) {
 /**
  * Deleta um ator.
  */
-export async function deleteAtor(id) {
-  const atorId = parseInt(id);
+async function deleteAtor(id) {
+  const atorId = parseInt(id, 10);
   if (isNaN(atorId)) {
-    throw new Error("ID do ator inválido.");
+    throw new Error('ID do ator inválido.');
   }
 
   // Verifica se o ator está em uso
@@ -86,10 +87,18 @@ export async function deleteAtor(id) {
   });
 
   if (count > 0) {
-    throw new Error("Não é possível deletar: Ator está associado a filmes.");
+    throw new Error('Não é possível deletar: Ator está associado a filmes.');
   }
 
   return prisma.ator.delete({
     where: { idAtor: atorId },
   });
 }
+
+module.exports = {
+  getAllAtores,
+  getAtorById,
+  createAtor,
+  updateAtor,
+  deleteAtor,
+};

@@ -1,10 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+// src/services/filmeService.js
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 /**
  * Lista todos os filmes, incluindo gêneros e atores.
  */
-export async function getFilmes() {
+async function getFilmes() {
   return prisma.filme.findMany({
     include: {
       generos: {
@@ -12,10 +13,9 @@ export async function getFilmes() {
           genero: true,
         },
       },
-      // ADICIONAR ESTA SEÇÃO
       atores: {
         include: {
-          ator: true, // Traz os detalhes do ator (ex: nome)
+          ator: true,
         },
       },
     },
@@ -25,11 +25,11 @@ export async function getFilmes() {
 /**
  * Busca um único filme pelo seu ID, incluindo gêneros e atores.
  */
-export async function getFilmeById(id) {
-  const filmeId = parseInt(id);
+async function getFilmeById(id) {
+  const filmeId = parseInt(id, 10);
 
   if (isNaN(filmeId)) {
-    throw new Error("ID do filme inválido.");
+    throw new Error('ID do filme inválido.');
   }
 
   return prisma.filme.findUnique({
@@ -40,7 +40,6 @@ export async function getFilmeById(id) {
           genero: true,
         },
       },
-      // ADICIONAR ESTA SEÇÃO
       atores: {
         include: {
           ator: true,
@@ -52,23 +51,14 @@ export async function getFilmeById(id) {
 
 /**
  * Adiciona um novo filme e associa seus gêneros e atores.
- * @param {object} filmeData - Os dados do filme.
- * ...
- * @param {Array<object>} [filmeData.atores] - Array de atores para associar.
- * @param {number} filmeData.atores[].idAtor - O ID do ator a conectar.
- * @param {string} [filmeData.atores[].personagem] - O nome do personagem.
- * @param {boolean} [filmeData.atores[].principal] - Se é o ator principal.
  */
-export async function addFilme(filmeData) {
-  // 1. DESESTRUTURAR 'atores'
-  const { titulo, anoLancamento, generos, atores, rating, duration } = filmeData;
+async function addFilme(filmeData) {
+  const { titulo, anoLancamento, generos, atores, rating, duration } = filmeData || {};
 
-  // 2. ATUALIZAR VALIDAÇÃO
   if (!titulo || !anoLancamento || !generos || !Array.isArray(generos) || generos.length === 0) {
-    throw new Error("Dados incompletos. Título, ano de lançamento e ao menos um gênero são obrigatórios.");
+    throw new Error('Dados incompletos. Título, ano de lançamento e ao menos um gênero são obrigatórios.');
   }
 
-  // 3. MAPEAR GÊNEROS (como antes)
   const generosParaCriar = generos.map((g) => {
     if (!g.idGenero) {
       throw new Error("Cada gênero deve ter um 'idGenero'.");
@@ -83,13 +73,12 @@ export async function addFilme(filmeData) {
     };
   });
 
-  // 4. ADICIONAR MAPEAMENTO DE ATORES
   const atoresParaCriar = (atores || []).map((a) => {
     if (!a.idAtor) {
       throw new Error("Cada ator deve ter um 'idAtor'.");
     }
     return {
-      personagem: a.personagem || null, // Pega o nome do personagem
+      personagem: a.personagem || null,
       principal: a.principal || false,
       ator: {
         connect: {
@@ -99,13 +88,12 @@ export async function addFilme(filmeData) {
     };
   });
 
-  // 5. ATUALIZAR O 'create'
   return prisma.filme.create({
     data: {
       titulo: titulo,
       anoLancamento: anoLancamento,
       rating: rating ?? 0.0,
-      duration: duration ?? "120 min",
+      duration: duration ?? '120 min',
       generos: {
         create: generosParaCriar,
       },
@@ -113,7 +101,7 @@ export async function addFilme(filmeData) {
         create: atoresParaCriar,
       },
     },
-    include: { // Manter includes para retornar o objeto completo
+    include: {
       generos: {
         include: {
           genero: true,
@@ -130,41 +118,27 @@ export async function addFilme(filmeData) {
 
 /**
  * Atualiza um filme existente.
- * Permite atualizar título, ano, gêneros e/ou atores.
- * ...
- * @param {Array<object>} [filmeData.atores] - A *nova lista completa* de atores.
+ * Se fornecer 'generos' ou 'atores', a lista passada substitui as relações
+ * anteriores (deleteMany + create).
  */
-export async function updateFilme(id, filmeData) {
-  const filmeId = parseInt(id);
-  
+async function updateFilme(id, filmeData) {
+  const filmeId = parseInt(id, 10);
+
   if (isNaN(filmeId)) {
-    throw new Error("ID do filme inválido.");
+    throw new Error('ID do filme inválido.');
   }
 
-  // 1. DESESTRUTURAR 'atores'
-  const { titulo, anoLancamento, generos, atores, rating, duration } = filmeData;
+  const { titulo, anoLancamento, generos, atores, rating, duration } = filmeData || {};
 
-  // 2. PREPARAR DADOS BÁSICOS (como antes)
   const updateData = {};
-  if (titulo !== undefined) {
-    updateData.titulo = titulo;
-  }
-  if (anoLancamento !== undefined) {
-    updateData.anoLancamento = anoLancamento;
-  }
-  if (rating !== undefined) {
-    updateData.rating = rating;
-  }
-  if (duration !== undefined) {
-    updateData.duration = duration;
-  }
+  if (titulo !== undefined) updateData.titulo = titulo;
+  if (anoLancamento !== undefined) updateData.anoLancamento = anoLancamento;
+  if (rating !== undefined) updateData.rating = rating;
+  if (duration !== undefined) updateData.duration = duration;
 
-  // 3. ATUALIZAR GÊNEROS (como antes)
   if (generos && Array.isArray(generos)) {
     const generosParaCriar = generos.map((g) => {
-      if (!g.idGenero) {
-        throw new Error("Cada gênero deve ter um 'idGenero'.");
-      }
+      if (!g.idGenero) throw new Error("Cada gênero deve ter um 'idGenero'.");
       return {
         principal: g.principal || false,
         genero: {
@@ -174,19 +148,14 @@ export async function updateFilme(id, filmeData) {
     });
 
     updateData.generos = {
-      deleteMany: {},
+      deleteMany: {}, // remove relações antigas
       create: generosParaCriar,
     };
   }
 
-  // 4. ADICIONAR ATUALIZAÇÃO DE ATORES
   if (atores && Array.isArray(atores)) {
-    
-    // Mapeia os atores para o formato de 'create' do Prisma
     const atoresParaCriar = atores.map((a) => {
-      if (!a.idAtor) {
-        throw new Error("Cada ator deve ter um 'idAtor'.");
-      }
+      if (!a.idAtor) throw new Error("Cada ator deve ter um 'idAtor'.");
       return {
         personagem: a.personagem || null,
         principal: a.principal || false,
@@ -196,14 +165,12 @@ export async function updateFilme(id, filmeData) {
       };
     });
 
-    // Adiciona a operação de relação ao 'updateData'
     updateData.atores = {
-      deleteMany: {}, // Deleta todas as relações antigas
-      create: atoresParaCriar, // Cria as novas relações
+      deleteMany: {}, // remove relações antigas
+      create: atoresParaCriar,
     };
   }
 
-  // 5. EXECUTAR ATUALIZAÇÃO (com includes atualizados)
   return prisma.filme.update({
     where: { idFilme: filmeId },
     data: updateData,
@@ -213,7 +180,7 @@ export async function updateFilme(id, filmeData) {
           genero: true,
         },
       },
-      atores: { // ADICIONAR ESTE INCLUDE
+      atores: {
         include: {
           ator: true,
         },
@@ -223,18 +190,24 @@ export async function updateFilme(id, filmeData) {
 }
 
 /**
- * Remove um filme (como antes - sem mudanças necessárias)
+ * Remove um filme pelo ID.
  */
-export async function deleteFilme(id) {
-  const filmeId = parseInt(id);
+async function deleteFilme(id) {
+  const filmeId = parseInt(id, 10);
 
   if (isNaN(filmeId)) {
-    throw new Error("ID do filme inválido.");
+    throw new Error('ID do filme inválido.');
   }
 
-  // 'onDelete: Cascade' cuidará de remover
-  // entradas em 'FilmeGenero' e 'FilmeAtor'.
   return prisma.filme.delete({
     where: { idFilme: filmeId },
   });
 }
+
+module.exports = {
+  getFilmes,
+  getFilmeById,
+  addFilme,
+  updateFilme,
+  deleteFilme,
+};
