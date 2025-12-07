@@ -27,7 +27,6 @@ services:
     environment:
       # Schema 'cliente'
       DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=cliente"
-    # Este comando está correto
     command: sh -c "npx prisma migrate dev && npm run dev"
 
   filmes-service:
@@ -40,8 +39,21 @@ services:
     environment:
       # Schema 'filmes'
       DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=filmes"
-    # Este comando agora vai funcionar
+    # Adicionando um delay para robustez na inicialização
     command: sh -c "sleep 10 && npx prisma migrate dev && npm run dev"
+
+  pagamento-service:
+    build: ./pagamento-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Schema 'pagamento'
+      DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=pagamento"
+    # Adicionando um delay para robustez na inicialização
+    command: sh -c "sleep 10 && npx prisma migrate deploy && npm run dev"
 
 volumes:
   pgdata:
