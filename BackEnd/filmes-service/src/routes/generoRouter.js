@@ -1,24 +1,26 @@
-import express from "express";
-
-import {
+// src/routes/generoRoutes.js
+const express = require('express');
+const {
   listarGeneros,
   buscarGenero,
   criarGenero,
   atualizarGenero,
   removerGenero,
-} from "../controllers/generoController.js";
+} = require('../controllers/generoController');
 
 const router = express.Router();
 
 // Rotas para /generos
-router.route("/")
+router
+  .route('/')
   .get(listarGeneros)   // GET /generos
-  .post(criarGenero);  // POST /generos
+  .post(criarGenero);   // POST /generos
 
 // Rotas para /generos/:id
-router.route("/:id")
+router
+  .route('/:id')
   .get(buscarGenero)     // GET /generos/1
   .put(atualizarGenero)  // PUT /generos/1
   .delete(removerGenero); // DELETE /generos/1
 
-export default router;
+module.exports = router;

@@ -1,5 +1,5 @@
-// c:\Project\UTFlix\BackEnd\filmes-service\src\docs\swagger.js
-export default {
+// src/docs/swagger.js
+module.exports = {
   openapi: "3.0.0",
   info: {
     title: "UTFlix - Serviço de Filmes",
@@ -261,4 +261,4 @@ export default {
       },
     },
   },
-}
+};
