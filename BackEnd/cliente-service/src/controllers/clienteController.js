@@ -1,10 +1,11 @@
 const clienteService = require("../services/clienteService");
-const { Prisma } = require("@prisma/client"); // Para tratar erros do Prisma
+const { Prisma } = require("@prisma/client");
+const { clienteToResponseDTO } = require("../dto/ClienteDTO");
 
 async function listar(req, res) {
   try {
     const clientes = await clienteService.listarClientes();
-    res.json(clientes);
+    res.json(clientes.map(clienteToResponseDTO));
   } catch (error) {
     res.status(500).json({ error: "Erro ao listar clientes." });
   }
@@ -17,7 +18,7 @@ async function criar(req, res) {
   try {
     const { nome, email, senha } = req.body;
     const cliente = await clienteService.criarCliente(nome, email, senha);
-    res.status(201).json(cliente);
+    res.status(201).json(clienteToResponseDTO(cliente));
   } catch (error) {
     // Trata erro de email duplicado
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
@@ -46,7 +47,7 @@ async function buscarPorId(req, res) {
     const { id } = req.params;
     const cliente = await clienteService.getClienteById(id);
     if (cliente) {
-      res.json(cliente);
+      res.json(clienteToResponseDTO(cliente));
     } else {
       res.status(404).json({ error: "Cliente não encontrado." });
     }
@@ -60,7 +61,7 @@ async function atualizar(req, res) {
     const { id } = req.params;
     const data = req.body;
     const cliente = await clienteService.updateCliente(id, data);
-    res.status(200).json(cliente);
+    res.status(200).json(clienteToResponseDTO(cliente));
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return res.status(404).json({ error: "Cliente não encontrado." });

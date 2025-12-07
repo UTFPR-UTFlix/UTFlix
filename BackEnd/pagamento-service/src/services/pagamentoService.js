@@ -5,27 +5,26 @@ import Pagamento from "../entities/Pagamento.js";
 const prisma = new PrismaClient();
 
 /**
- * Lista todos os pagamentos.
+ * Lista todos os pagamentos do cliente autenticado.
  */
-export async function getAllPagamentos() {
+export async function getAllPagamentos(idCliente) {
   return prisma.pagamento.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
+    where: { idCliente: String(idCliente) },
+    orderBy: { createdAt: "desc" },
   });
 }
 
 /**
- * Busca um pagamento pelo ID.
+ * Busca um pagamento pelo ID respeitando ownership.
  */
-export async function getPagamentoById(id) {
+export async function getPagamentoById(id, idCliente) {
   const pagamentoId = parseInt(id);
   if (isNaN(pagamentoId)) {
     throw new Error("ID de pagamento inválido.");
   }
 
-  return prisma.pagamento.findUnique({
-    where: { idPagamento: pagamentoId },
+  return prisma.pagamento.findFirst({
+    where: { idPagamento: pagamentoId, idCliente: String(idCliente) },
   });
 }
 
@@ -50,19 +49,26 @@ export async function createPagamento(pagamentoData) {
 /**
  * Atualiza um pagamento existente.
  */
-export async function updatePagamento(id, pagamentoData) {
+export async function updatePagamento(id, pagamentoData, idCliente) {
   const pagamentoId = parseInt(id);
   if (isNaN(pagamentoId)) {
     throw new Error("ID de pagamento inválido.");
   }
+
+  const existing = await prisma.pagamento.findFirst({
+    where: { idPagamento: pagamentoId, idCliente: String(idCliente) },
+  });
+  if (!existing) {
+    const err = new Error("Pagamento não encontrado ou não pertence ao usuário.");
+    err.code = "OWNERSHIP";
+    throw err;
+  }
   
-  // Filtra apenas os campos que podem ser atualizados
   const updateData = {};
   if (pagamentoData.descricao !== undefined) updateData.descricao = pagamentoData.descricao;
   if (pagamentoData.valor !== undefined) updateData.valor = parseFloat(pagamentoData.valor);
   if (pagamentoData.metodoPagamento !== undefined) updateData.metodoPagamento = pagamentoData.metodoPagamento;
   
-  // Verificação de valor (opcional)
   if (updateData.valor !== undefined && updateData.valor <= 0) {
       throw new Error("O valor não pode ser negativo ou zero.");
   }
@@ -76,13 +82,21 @@ export async function updatePagamento(id, pagamentoData) {
 /**
  * Deleta um pagamento.
  */
-export async function deletePagamento(id) {
+export async function deletePagamento(id, idCliente) {
   const pagamentoId = parseInt(id);
   if (isNaN(pagamentoId)) {
     throw new Error("ID de pagamento inválido.");
   }
 
-  // Não há necessidade de verificação de uso, pois pagamento é um registro isolado.
+  const existing = await prisma.pagamento.findFirst({
+    where: { idPagamento: pagamentoId, idCliente: String(idCliente) },
+  });
+  if (!existing) {
+    const err = new Error("Pagamento não encontrado ou não pertence ao usuário.");
+    err.code = "OWNERSHIP";
+    throw err;
+  }
+
   return prisma.pagamento.delete({
     where: { idPagamento: pagamentoId },
   });

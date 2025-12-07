@@ -27,6 +27,7 @@ services:
     environment:
       # Schema 'cliente'
       DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=cliente"
+      JWT_SECRET: "change_me_in_prod"
     command: sh -c "npx prisma migrate dev && npm run dev"
 
   filmes-service:
@@ -52,6 +53,7 @@ services:
     environment:
       # Schema 'pagamento'
       DATABASE_URL: "postgresql://admin:admin@db:5432/minhaapi?schema=pagamento"
+      JWT_SECRET: "change_me_in_prod"
     # Adicionando um delay para robustez na inicialização
     command: sh -c "sleep 10 && npx prisma migrate deploy && npm run dev"
 
