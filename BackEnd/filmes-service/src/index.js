@@ -6,11 +6,14 @@ const atorRouter = require('./routes/atorRoutes.js');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./docs/swagger.js');
+const healthcheckRouter = require('./routes/healthcheck');
 
 const app = express();
+
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/', healthcheckRouter);
 app.use('/filmes', routerFilmes);
 app.use('/generos', generoRouter);
 app.use('/atores', atorRouter);

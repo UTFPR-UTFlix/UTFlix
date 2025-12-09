@@ -4,7 +4,7 @@ import cors from "cors";
 import pagamentoRoutes from "./routes/pagamentoRoutes.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./docs/swagger.js";
-
+import healthcheckRouter from './routes/healthcheck.js';
 const app = express();
 const PORT = 3002;
 
@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 // Swagger
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
+app.use('/', healthcheckRouter); 
 // Rota de saúde simples
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'Pagamento Service rodando! Versão 1.0' });
