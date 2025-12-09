@@ -22,10 +22,10 @@ router.get('/health', async (req, res) => {
     };
 
     res.status(200).json(healthcheck);
-  } catch (error) {
-    healthcheck.status = 'DOWN';
-    res.status(503).json(healthcheck);
-  }
+  } catch {
+  healthcheck.status = 'DOWN';
+  res.status(503).json(healthcheck);
+}
 });
 
 router.get('/health/ready', async (req, res) => {
