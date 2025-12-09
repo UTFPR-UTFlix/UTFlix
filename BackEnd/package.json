@@ -12,7 +12,7 @@
   "scripts": {
     "lint": "npm run lint --workspaces",
     "test": "npm --workspaces --if-present run test -- --runInBand",
-  "test:all": "npm --workspace=cliente-service run test -- --runInBand && npm --workspace=filmes-service run test -- --runInBand"
+    "test:all": "npm --workspace=cliente-service run test -- --runInBand && npm --workspace=filmes-service run test -- --runInBand"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +27,7 @@
     "supertest": "^7.1.4"
   },
   "dependencies": {
+    "express": "^5.2.1",
     "prisma": "^7.0.1"
   }
 }
